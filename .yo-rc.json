@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Dennis Ploeger",
+      "authorEmail": "develop@dieploegers.de",
+      "authorUrl": "https://waldbuehne-heessen.de"
+    }
+  }
+}

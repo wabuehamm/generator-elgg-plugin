@@ -1,0 +1,21 @@
+{
+  "name": "<%= githubOwner %>/<%= id %>",
+  "description": "<%= description %>",
+  "type": "elgg-plugin",
+  "keywords": [
+    "elgg",
+    "plugin"
+  ],
+  "license": "<%= license %>",
+  <% if (githubRelease) { %>
+  "support": {
+    "source": "https://github.com/<%= githubOwner %>/<%= githubRepository %>",
+    "issues": "https://github.com/<%= githubOwner %>/<%= githubRepository %>/issues"
+  },<% } %>
+  "require": {
+    "composer/installers": "^1.0.8"
+  },
+  "conflict": {
+    "elgg/elgg": "<<%= elggRelease %>"
+  }
+}
