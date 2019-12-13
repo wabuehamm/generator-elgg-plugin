@@ -3,78 +3,8 @@ const Generator = require('yeoman-generator')
 const chalk = require('chalk')
 const yosay = require('yosay')
 
-const pluginCategories = [
-    { name: 'Site admin', value: 'admin', short: 'admin' },
-    { name: 'User admin', value: 'user', short: 'user' },
-    {
-        name: 'Authentication',
-        value: 'authentication',
-        short: 'authentication'
-    },
-    { name: 'Tools', value: 'tools', short: 'tools' },
-    { name: 'Spam', value: 'spam', short: 'spam' },
-    {
-        name: 'Communication',
-        value: 'communication',
-        short: 'communication'
-    },
-    { name: 'Events', value: 'events', short: 'events' },
-    { name: 'Media', value: 'media', short: 'media' },
-    { name: 'Photos and Images', value: 'photos', short: 'photos' },
-    {
-        name: 'Third Party integrations',
-        value: 'tpintegrations',
-        short: 'tpintegrations'
-    },
-    { name: 'Clients', value: 'clients', short: 'clients' },
-    { name: 'Widgets', value: 'widgets', short: 'widgets' },
-    { name: 'Games', value: 'games', short: 'games' },
-    { name: 'eCommerce', value: 'ecommerce', short: 'ecommerce' },
-    { name: 'Language packs', value: 'languages', short: 'languages' },
-    { name: 'Themes', value: 'themes', short: 'themes' },
-    { name: 'Misc', value: 'misc', short: 'misc' },
-    {
-        name: 'Uncategorized',
-        value: 'uncategorized',
-        short: 'uncategorized'
-    }
-]
-
-const pluginLicenses = [
-    {
-        name: 'GNU General Public License (GPL) version 2,',
-        value: 'gpl2',
-        short: 'gpl2'
-    },
-    {
-        name: 'GNU Lesser General Public License (LGPL) version 2.1,',
-        value: 'lgpl2.1',
-        short: 'lgpl2.1'
-    },
-    {
-        name: 'Berkeley Database License (aka the Sleepycat Software Product License),',
-        value: 'berkeleydb',
-        short: 'berkeleydb'
-    },
-    { name: 'Modified BSD license,', value: 'mbsd', short: 'mbsd' },
-    { name: 'The Clear BSD License,', value: 'cbsd', short: 'cbsd' },
-    { name: 'Expat (MIT) License,', value: 'expat', short: 'expat' },
-    { name: 'FreeBSD license,', value: 'freebsd', short: 'freebsd' },
-    { name: 'Intel Open Source License,', value: 'intel', short: 'intel' },
-    { name: 'ISC (OpenBSD) License,', value: 'openbsd', short: 'openbsd' },
-    {
-        name: 'NCSA/University of Illinois Open Source License,',
-        value: 'ncsa',
-        short: 'ncsa'
-    },
-    { name: 'W3C Software Notice and License,', value: 'w3c', short: 'w3c' },
-    { name: 'X11 License,', value: 'x11', short: 'x11' },
-    {
-        name: 'Zope Public License, versions 2.0 and 2.1,',
-        value: 'zope',
-        short: 'zope'
-    }
-]
+const pluginCategories = require('./categories')
+const pluginLicenses = require('./licenses')
 
 module.exports = class extends Generator {
     prompting() {
@@ -177,8 +107,8 @@ module.exports = class extends Generator {
         let licenseName = pluginLicenses.find(license => license.value === this.props.license).name
 
         this.fs.copyTpl(this.templatePath('package.json.ejs'), this.destinationPath('package.json'), {
-            name: this.props.id,
-            license: licenseName,
+            name: this.props.name,
+            license: this.props.license,
             repository: this.props.repository,
             githubRelease: this.props.githubRelease,
             githubOwner: this.props.githubOwner,
