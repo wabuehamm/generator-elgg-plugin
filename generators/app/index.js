@@ -9,7 +9,7 @@ const pluginLicenses = require('./licenses')
 module.exports = class extends Generator {
     prompting() {
         const capitalize = value => {
-            return value.substring(0, 1).toUpperCase() + value.substring(1, value.length - 1)
+            return value.substring(0, 1).toUpperCase() + value.substring(1, value.length)
         }
 
         const descriptionPrefix = (value, required = false) => {
