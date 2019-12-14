@@ -39,13 +39,14 @@ describe('generator-elgg-plugin:app', () => {
             'manifest.xml',
             'elgg-plugin.php',
             'languages/en.php',
-            'Tester/TesterElggPlugin/Bootstrap.php'
+            'classes/Tester/TesterElggPlugin/Bootstrap.php'
         ])
     })
 
     it('creates a valid package.json', () => {
         assert.jsonFileContent('package.json', {
-            name: answers.name,
+            name: answers.id,
+            description: answers.description,
             homepage: answers.website,
             license: answers.license,
             author: {
@@ -106,7 +107,7 @@ describe('generator-elgg-plugin:app', () => {
         assert.fileContent('elgg-plugin.php', 'Tester\\TesterElggPlugin')
     })
     it('creates a valid Bootstrap', () => {
-        assert.fileContent('Tester/TesterElggPlugin/Bootstrap.php', 'namespace Tester\\TesterElggPlugin;')
+        assert.fileContent('classes/Tester/TesterElggPlugin/Bootstrap.php', 'namespace Tester\\TesterElggPlugin;')
     })
     it('creates a valid composer.json', () => {
         assert.jsonFileContent('composer.json', {

@@ -169,7 +169,8 @@ module.exports = class extends Generator {
         let licenseName = pluginLicenses.find(license => license.value === this.props.license).name
 
         this.fs.copyTpl(this.templatePath('package.json.ejs'), this.destinationPath('package.json'), {
-            name: this.props.name,
+            name: this.props.id,
+            description: this.props.description,
             license: this.props.license,
             repository: this.props.repository,
             githubRelease: this.props.githubRelease,
@@ -222,7 +223,7 @@ module.exports = class extends Generator {
 
         const bootstrapPath = this.props.namespace.replace(/\\/, '/')
 
-        this.fs.copyTpl(this.templatePath('Bootstrap.php.ejs'), this.destinationPath(`${bootstrapPath}/Bootstrap.php`), {
+        this.fs.copyTpl(this.templatePath('Bootstrap.php.ejs'), this.destinationPath(`classes/${bootstrapPath}/Bootstrap.php`), {
             namespace: this.props.namespace
         })
 
@@ -233,6 +234,6 @@ module.exports = class extends Generator {
     }
 
     install() {
-        this.installDependencies()
+        this.installDependencies({ bower: false })
     }
 }
