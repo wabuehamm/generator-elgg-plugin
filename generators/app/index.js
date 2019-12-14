@@ -9,91 +9,153 @@ const pluginLicenses = require('./licenses')
 module.exports = class extends Generator {
     prompting() {
         const capitalize = value => {
-            return value.substring(0, 1).toUpperString + value.substring(1, value.length - 1)
+            return value.substring(0, 1).toUpperCase() + value.substring(1, value.length - 1)
+        }
+
+        const descriptionPrefix = (value, required = false) => {
+            return value.replace(/\n\s+/g, '\n') + `\n${chalk.green('?')}` + (required ? chalk.red('*') : '')
+        }
+
+        const required = value => {
+            if (value && value !== '') {
+                return true
+            }
+
+            return chalk.red('This value is required.')
         }
 
         this.log(yosay(`Welcome to the ${chalk.red('Elgg Plugin')} generator!`))
 
+        this.log(`
+            This generator will create a ${chalk.yellow('skeleton')} for a plugin for ${chalk.yellow('the Elgg platform')}. 
+            Please answer the following questions (questions marked with ${chalk.red('*')} are required):
+        `)
+
         const prompts = [
             {
                 name: 'id',
-                message: `Please enter the ID of your new plugin. It will be the ${chalk.yellow(
-                    'directory name'
-                )} inside the ${chalk.yellow('mod folder')} of your Elgg installation`,
-                default: this.appname
+                default: this.appname,
+                prefix: descriptionPrefix(
+                    `
+                    Please enter the ID of your new plugin.
+                    This will be the ${chalk.yellow('directory name')} inside the ${chalk.yellow('mod folder')} of your Elgg installation.
+                    `,
+                    true
+                ),
+                validate: required
             },
             {
                 name: 'name',
-                message: `Please enter the name of your new plugin. This will be shown in the ${chalk.yellow('plugins UI')}.`,
-                default: this.appname
+                prefix: descriptionPrefix(
+                    `
+                    Please enter the name of your new plugin.
+                    This will be shown in the ${chalk.yellow('plugins UI')}.
+                    `,
+                    true
+                ),
+                default: this.appname,
+                validate: required
             },
             {
                 name: 'description',
-                message: 'Please enter a general description for your plugin'
+                prefix: descriptionPrefix('Please enter a general description for your plugin')
             },
             {
                 name: 'elggRelease',
-                message: 'Please enter the required Elgg release',
-                default: '3.0.0'
+                prefix: descriptionPrefix(
+                    `
+                    Please enter the required Elgg release.
+                    This will be used for the ${chalk.yellow('composer configuration')} and in the 
+                    ${chalk.yellow("plugin's manifest file")}.
+                    `,
+                    true
+                ),
+                default: '3.0.0',
+                validate: required
             },
             {
                 name: 'category',
-                message: 'Please choose a category for your plugin',
+                prefix: descriptionPrefix(`
+                    Please choose a category for your plugin.
+                    Filtering for this will be available in the ${chalk.yellow('plugin UI')} and the 
+                    ${chalk.yellow('Elgg plugin registry')}
+                `),
                 type: 'list',
                 choices: pluginCategories,
                 default: 17
             },
             {
                 name: 'author',
-                message: "Please enter the author's name",
-                default: this.user.git.name()
+                prefix: descriptionPrefix("Please enter the author's name", true),
+                default: this.user.git.name(),
+                validate: required
             },
             {
                 name: 'email',
-                message: "Please enter the author's email",
+                prefix: descriptionPrefix("Please enter the author's email"),
                 default: this.user.git.email()
             },
             {
                 name: 'website',
-                message: "Please enter the plugin's website"
+                prefix: descriptionPrefix("Please enter the plugin's website")
             },
             {
                 name: 'license',
-                message: 'Please select the license',
+                prefix: descriptionPrefix('Please select the license', true),
                 type: 'list',
-                choices: pluginLicenses
+                choices: pluginLicenses,
+                validate: required
             },
             {
                 name: 'repository',
-                message: 'Please enter your git repository url'
+                prefix: descriptionPrefix('Please enter your git repository url')
             },
             {
                 name: 'githubRelease',
-                message: 'Do you want to manage releases in GitHub?',
+                prefix: descriptionPrefix(`
+                    Do you want to manage ${chalk.yellow('releases in GitHub')}?
+                    You will need to enter a ${chalk.yellow('repository')} and its ${chalk.yellow('owner')} up next 
+                    and you need to create a ${chalk.yellow('github access token')} here:
+                    
+                    ${chalk.yellow('https://github.com/settings/tokens')}
+                    
+                    Then you can create a new release like this:
+
+                    ${chalk.yellow('GITHUB_TOKEN=<my token> grunt release:<new release number>')}
+                `),
                 type: 'confirm',
                 default: true
             },
             {
                 name: 'githubOwner',
-                message: 'What is the owner or organization of the github repository?',
+                prefix: descriptionPrefix('What is the owner or organization of the github repository?', true),
                 when: answers => answers.githubRelease,
-                default: this.user.github.username() || 'FIXME'
+                default: () => this.user.github.username() || 'FIXME',
+                validate: required
             },
             {
                 name: 'githubRepository',
-                message: 'What is the name of the github Repository?',
-                when: answers => answers.githubRelease
+                prefix: descriptionPrefix('What is the name of the github Repository?', true),
+                when: answers => answers.githubRelease,
+                validate: required
             },
             {
                 name: 'namespace',
-                message: 'This generator will create a bootstrap class for your plugin. Please specify a PHP namespace for that',
+                prefix: descriptionPrefix(
+                    `
+                    This generator will create a bootstrap class for your plugin. Please specify a PHP namespace for that.
+                    PHP namespaces are usually organized as ${chalk.yellow('<group>\\<application>(\\<subpath>)')}
+                    `,
+                    true
+                ),
                 default: answers => {
                     if (answers.githubRelease) {
-                        return `${capitalize(answers.githubOwner)}/${capitalize(answers.id)}`
+                        return `${capitalize(answers.githubOwner)}\\${capitalize(answers.id)}`
                     }
 
                     return `MyName\\${capitalize(answers.id)}`
-                }
+                },
+                validate: required
             }
         ]
 
