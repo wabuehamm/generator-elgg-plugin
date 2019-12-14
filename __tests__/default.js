@@ -4,7 +4,6 @@ const assert = require('yeoman-assert')
 const helpers = require('yeoman-test')
 const xml2js = require('xml2js')
 const fs = require('fs')
-// Cconst pluginCategories = require('../generators/app/categories')
 const pluginLicenses = require('../generators/app/licenses')
 
 const answers = {
@@ -98,6 +97,7 @@ describe('generator-elgg-plugin:app', () => {
         assert.fileContent('README.md', `# ${answers.name}`)
         assert.fileContent('README.md', answers.description)
         assert.fileContent('README.md', `* Elgg >= ${answers.elggRelease}`)
+        assert.fileContent('README.md', 'grunt release')
     })
     it('creates a valid release.md', () => {
         assert.fileContent('release.md', `Elgg ${answers.elggRelease}`)

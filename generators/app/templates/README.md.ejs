@@ -9,7 +9,7 @@
 # Installation
 
 Download a release and unzip the file into the `mods` directory of Elgg.
-
+<% if (githubRelease) { %>
 # Development
 
 ## Release
@@ -17,3 +17,4 @@ Download a release and unzip the file into the `mods` directory of Elgg.
 Run the following command to release a new version to GitHub
 
     GITHUB_TOKEN=<my token> grunt release:<new release number>
+<% } %>

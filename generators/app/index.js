@@ -198,7 +198,8 @@ module.exports = class extends Generator {
         this.fs.copyTpl(this.templatePath('README.md.ejs'), this.destinationPath('README.md'), {
             name: this.props.name,
             description: this.props.description,
-            elggRelease: this.props.elggRelease
+            elggRelease: this.props.elggRelease,
+            githubRelease: this.props.githubRelease
         })
 
         this.fs.copyTpl(this.templatePath('release.md.ejs'), this.destinationPath('release.md'), {
