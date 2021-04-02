@@ -34,7 +34,7 @@ describe('generator-elgg-plugin:app', () => {
             'manifest.xml',
             'elgg-plugin.php',
             'languages/en.php',
-            'Tester/TesterElggPlugin/Bootstrap.php'
+            'classes/Tester/TesterElggPlugin/Bootstrap.php'
         ])
     })
 
